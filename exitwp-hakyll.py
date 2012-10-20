@@ -50,16 +50,6 @@ class ns_tracker_tree_builder(XMLTreeBuilder):
         self.namespaces[prefix] = '{' + ns + '}'
 
 
-def html2fmt(html, target_format):
-    #   html = html.replace("\n\n", '<br/><br/>')
-    #   html = html.replace('<pre lang="xml">', '<pre lang="xml"><![CDATA[')
-    #   html = html.replace('</pre>', ']]></pre>')
-    if target_format == 'html':
-        return html
-    else:
-        return html2text_file(html, None)
-
-
 def parse_wp_xml(file):
     parser = ns_tracker_tree_builder()
     tree = ElementTree()
@@ -323,13 +313,14 @@ def write_hakyll(data, target_format):
 
             out.write('---\n\n')
             try:
-                out.write(html2fmt(i['body'], target_format))
+                out.write(html2text_file(i['body']))
             except:
                 print "\n Parse error on: " + i['title']
 
             out.close()
     print "\n"
 
+# main script
 wp_exports = glob(wp_exports + '/*.xml')
 for wpe in wp_exports:
     data = parse_wp_xml(wpe)
