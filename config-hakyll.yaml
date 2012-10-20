@@ -1,3 +1,10 @@
+#
+# config-hakyll.yaml - configuration file for exitwp-hakyll.py
+#
+# Author: Mateusz Loskot <mateusz@loskot.net>
+# Inspired by original config.yaml created by Thomas Frössman.
+#
+
 # The directory where exitwp looks for wordpress export xml files.
 wp_exports: wordpress-xml
 

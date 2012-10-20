@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-
+#
+# exitwp-hakyll - converts WordPress XML to Haykll format conversion
+# Author: Mateusz Loskot <mateusz@loskot.net>
+# Inspired by original exitwp.py created by Thomas Frössman.
+#
 from xml.etree.ElementTree import ElementTree, XMLTreeBuilder
 import os
 import codecs
@@ -14,15 +18,15 @@ from urllib import urlretrieve
 from html2text import html2text_file
 
 '''
-exitwp - Wordpress xml exports to Jekykll blog format conversion
+exitwp-hakyll - Wordpress XML exports to Haykll blog format conversion
 
-Tested with Wordpress 3.3.1 and jekyll 0.11.2
+Tested with Wordpress 3.3.1
 
 '''
 ######################################################
 # Configration
 ######################################################
-config = yaml.load(file('config.yaml', 'r'))
+config = yaml.load(file('config-hakyll.yaml', 'r'))
 wp_exports = config['wp_exports']
 build_dir = config['build_dir']
 download_images = config['download_images']
@@ -144,7 +148,7 @@ def parse_wp_xml(file):
     }
 
 
-def write_jekyll(data, target_format):
+def write_hakyll(data, target_format):
 
     sys.stdout.write("writing")
     item_uids = {}
@@ -329,6 +333,6 @@ def write_jekyll(data, target_format):
 wp_exports = glob(wp_exports + '/*.xml')
 for wpe in wp_exports:
     data = parse_wp_xml(wpe)
-    write_jekyll(data, target_format)
+    write_hakyll(data, target_format)
 
 print 'done'
