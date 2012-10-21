@@ -94,7 +94,7 @@ def parse_wp_xml(file):
                     tag = q
                 try:
                     result = i.find(ns[namespace] + tag).text
-                    print result
+                    #print result
                 except AttributeError:
                     result = "No Content Found"
                 if unicode_wrap:
@@ -104,6 +104,7 @@ def parse_wp_xml(file):
             body = gi('content:encoded')
             for key in body_replace:
                 body = body.replace(key, body_replace[key])
+                #print 'Replacing', key, 'with', body_replace[key]
 
             img_srcs = []
             if body is not None:
@@ -325,7 +326,7 @@ def write_hakyll(data, target_format):
 
             out.write('---\n\n')
             try:
-                out.write(html2text_file(i['body']))
+                out.write(html2text_file(i['body'], None))
             except:
                 print "\n Parse error on: " + i['title']
 
