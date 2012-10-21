@@ -1,3 +1,9 @@
+# exitwp-hakyll
+
+This is exitwp version taking into account requirements specific to Hakyll.
+
+## Features
+
 * Convert HTML to clean Markdown.
 * Do not use underscores in metadata keywords.
     * For example, generate `wordpressid` instead of `wordpress_id`.

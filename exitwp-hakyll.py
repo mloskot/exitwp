@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # exitwp-hakyll - converts WordPress XML to Haykll format conversion
 # Author: Mateusz Loskot <mateusz@loskot.net>
@@ -29,6 +30,7 @@ Tested with Wordpress 3.3.1
 config = yaml.load(file('config-hakyll.yaml', 'r'))
 wp_exports = config['wp_exports']
 build_dir = config['build_dir']
+build_mode = config['build_mode']
 download_images = config['download_images']
 target_format = config['target_format']
 taxonomy_filter = set(config['taxonomies']['filter'])
@@ -144,7 +146,7 @@ def write_hakyll(data, target_format):
     item_uids = {}
     attachments = {}
 
-    def get_blog_path(data, path_infix='jekyll'):
+    def get_blog_path(data, path_infix='hakyll'):
         name = data['header']['link']
         name = re.sub('^https?', '', name)
         name = re.sub('[^A-Za-z0-9_.-]', '', name)
@@ -195,10 +197,18 @@ def write_hakyll(data, target_format):
     def get_item_path(item, dir=''):
         full_dir = get_full_dir(dir)
         filename_parts = [full_dir, '/']
-        filename_parts.append(item['uid'])
+        if build_mode == 'tree':
+            m = re.search('(\d+-\d+-\d+)(-)(.+)', item['uid'])
+            uiddt = datetime.strptime(m.group(1),'%Y-%m-%d').strftime('%Y/%m/%d')
+            filename_parts.append(uiddt)
+            if (not os.path.exists(''.join(filename_parts))):
+                    os.makedirs(''.join(filename_parts))
+            filename_parts.append(os.path.join('/', m.group(3)))
+        else:
+            filename_parts.append(item['uid'])
         if item['type'] == 'page':
             if (not os.path.exists(''.join(filename_parts))):
-                os.makedirs(''.join(filename_parts))
+                    os.makedirs(''.join(filename_parts))
             filename_parts.append('/index')
         filename_parts.append('.')
         filename_parts.append(target_format)
@@ -250,9 +260,9 @@ def write_hakyll(data, target_format):
         out = None
         yaml_header = {
             'title': i['title'],
-            'date': datetime.strptime(i['date'], '%Y-%m-%d %H:%M:%S'),
+            'published': datetime.strptime(i['date'], '%Y-%m-%d %H:%M:%S'),
             'slug': i['slug'],
-            'wordpress_id': int(i['wp_id']),
+            'wordpressid': int(i['wp_id']),
             'comments': i['comments'],
         }
         if i['status'] != u'publish':
@@ -297,13 +307,15 @@ def write_hakyll(data, target_format):
 
             tax_out = {}
             for taxonomy in i['taxanomies']:
+                tvalue_list = []
                 for tvalue in i['taxanomies'][taxonomy]:
                     t_name = taxonomy_name_mapping.get(taxonomy, taxonomy)
                     if t_name not in tax_out:
                         tax_out[t_name] = []
                     if tvalue in tax_out[t_name]:
                         continue
-                    tax_out[t_name].append(tvalue)
+                    tvalue_list.append(tvalue)
+                tax_out[t_name] = ",".join(tvalue_list)
 
             out.write('---\n')
             if len(yaml_header) > 0:

@@ -6,10 +6,15 @@
 #
 
 # The directory where exitwp looks for wordpress export xml files.
-wp_exports: wordpress-xml
+wp_exports: wp-xml
 
 # The target directory where all output is saved.
 build_dir: build
+
+# Build mode:
+#  flat - (default) folder with date-prefixed post file names: YYYY-MM-DD-title.markdown
+#  tree - date-based (sub)folders structure YYYY/MM/DD/title.markdown
+build_mode: tree 
 
 # Output format: primary choices are html or markdown.
 target_format: markdown
