@@ -183,7 +183,7 @@ def write_hakyll(data, target_format):
                 s_title = item['title']
             if s_title is None or s_title == '':
                 s_title = 'untitled'
-            s_title = s_title.replace(' ', '_')
+            s_title = s_title.strip(' \t\n\r\'').replace(' ', '_')
             s_title = re.sub('[^a-zA-Z0-9_-]', '', s_title)
             uid.append(s_title)
             fn = ''.join(uid)
