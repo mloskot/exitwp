@@ -183,7 +183,8 @@ def write_hakyll(data, target_format):
                 s_title = item['title']
             if s_title is None or s_title == '':
                 s_title = 'untitled'
-            s_title = s_title.strip(' \t\n\r\'').replace(' ', '_')
+            s_title = s_title.replace(' ', '_')
+            s_title = s_title.strip(' \t\n\r\'')
             s_title = re.sub('[^a-zA-Z0-9_-]', '', s_title)
             uid.append(s_title)
             fn = ''.join(uid)
@@ -259,8 +260,10 @@ def write_hakyll(data, target_format):
         sys.stdout.write(".")
         sys.stdout.flush()
         out = None
+        title = i['title'].strip(' \t\n\r\'')
+        #print title
         yaml_header = {
-            'title': i['title'],
+            'title': title,
             'date': datetime.strptime(i['date'], '%Y-%m-%d %H:%M:%S'),
             'slug': i['slug'],
             'wordpressid': int(i['wp_id']),
@@ -328,7 +331,7 @@ def write_hakyll(data, target_format):
             try:
                 out.write(html2text_file(i['body'], None))
             except:
-                print "\n Parse error on: " + i['title']
+                print "\n Parse error on: " + title
 
             out.close()
     print "\n"
