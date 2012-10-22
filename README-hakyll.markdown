@@ -7,8 +7,8 @@ This is exitwp version taking into account requirements specific to Hakyll.
 * Convert HTML to clean Markdown.
 * Do not use underscores in metadata keywords.
     * For example, generate `wordpressid` instead of `wordpress_id`.
-* Use 'published' keyword instead of 'date'.
-* Generate date in ISO8601 format.
+* <strike>Use 'published' keyword instead of 'date'.</strike> - Hakyll's got 'date' field support.
+* <strike>Generate date in ISO8601 format.</strike> - Hakyll's got relaxed ISO8601 ('T' replaced wth space, no 'Z') format support.
 * Flat format of taxonomy tags output:
 
 ```
