@@ -261,7 +261,7 @@ def write_hakyll(data, target_format):
         out = None
         yaml_header = {
             'title': i['title'],
-            'published': datetime.strptime(i['date'], '%Y-%m-%d %H:%M:%S'),
+            'date': datetime.strptime(i['date'], '%Y-%m-%d %H:%M:%S'),
             'slug': i['slug'],
             'wordpressid': int(i['wp_id']),
             'comments': i['comments'],
