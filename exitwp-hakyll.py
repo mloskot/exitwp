@@ -260,10 +260,10 @@ def write_hakyll(data, target_format):
         sys.stdout.write(".")
         sys.stdout.flush()
         out = None
-        title = i['title'].strip(' \t\n\r\'')
-        #print title
+
+        i['title'] = i['title'].strip(' \t\n\r\'')
         yaml_header = {
-            'title': title,
+            'title': i['title'],
             'date': datetime.strptime(i['date'], '%Y-%m-%d %H:%M:%S'),
             'slug': i['slug'],
             'wordpressid': int(i['wp_id']),
