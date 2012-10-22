@@ -2,6 +2,12 @@
 
 This is exitwp version taking into account requirements specific to Hakyll.
 
+## Requirements
+
+* Python 2.x
+* BeautifulSoup
+* See import statements at the top of exitwp-hakyll.py 
+
 ## Features
 
 * Convert HTML to clean Markdown.

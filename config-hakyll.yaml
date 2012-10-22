@@ -45,9 +45,12 @@ taxonomies:
 # Replace certain patterns in body
 # Simply replace the key with its value
 body_replace: {
+    '[sourcecode language="plain" gutter="true" light="true"]': '<pre>',
     '[sourcecode language="xml"]': '<pre>',
     '[sourcecode language="cpp"]': '<pre>',
     '[sourcecode language="python"]': '<pre>',
     '[sourcecode]': '<pre>',
     '[/sourcecode]': '</pre>',
+    '[text]': '<pre>',
+    '[/text]': '</pre>',
 }
