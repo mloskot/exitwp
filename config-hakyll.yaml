@@ -6,7 +6,7 @@
 #
 
 # The directory where exitwp looks for wordpress export xml files.
-wp_exports: wp-xml
+wp_exports: wordpress-xml
 
 # The target directory where all output is saved.
 build_dir: build
