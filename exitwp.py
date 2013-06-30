@@ -3,12 +3,12 @@
 from xml.etree.ElementTree import ElementTree, XMLTreeBuilder
 import os
 import codecs
-from datetime import datetime
+from datetime import datetime, tzinfo, timedelta
 from glob import glob
 import re
 import sys
 import yaml
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from urlparse import urlparse, urljoin
 from urllib import urlretrieve
 from html2text import html2text_file
@@ -34,6 +34,25 @@ item_type_filter = set(config['item_type_filter'])
 item_field_filter = config['item_field_filter']
 date_fmt = config['date_format']
 body_replace = config['body_replace']
+
+
+# Time definitions
+ZERO = timedelta(0)
+HOUR = timedelta(hours=1)
+
+
+# UTC support
+class UTC(tzinfo):
+    """UTC"""
+
+    def utcoffset(self, dt):
+        return ZERO
+
+    def tzname(self, dt):
+        return "UTC"
+
+    def dst(self, dt):
+        return ZERO
 
 
 class ns_tracker_tree_builder(XMLTreeBuilder):
@@ -114,7 +133,7 @@ def parse_wp_xml(file):
             if body is not None:
                 try:
                     soup = BeautifulSoup(body)
-                    img_tags = soup.findAll('img')
+                    img_tags = soup.find_all('img')
                     for img in img_tags:
                         img_srcs.append(img['src'])
                 except:
@@ -123,7 +142,8 @@ def parse_wp_xml(file):
 
             export_item = {
                 'title': gi('title'),
-                'date': gi('wp:post_date'),
+                'author': gi('dc:creator'),
+                'date': gi('wp:post_date_gmt'),
                 'slug': gi('wp:post_name'),
                 'status': gi('wp:status'),
                 'type': gi('wp:post_type'),
@@ -211,7 +231,7 @@ def write_jekyll(data, target_format):
         filename_parts.append(target_format)
         return ''.join(filename_parts)
 
-    def get_attachment_path(src, dir, dir_prefix='a'):
+    def get_attachment_path(src, dir, dir_prefix='images'):
         try:
             files = attachments[dir]
         except KeyError:
@@ -257,7 +277,8 @@ def write_jekyll(data, target_format):
         out = None
         yaml_header = {
             'title': i['title'],
-            'date': datetime.strptime(i['date'], '%Y-%m-%d %H:%M:%S'),
+            'author': i['author'],
+            'date': datetime.strptime(i['date'], '%Y-%m-%d %H:%M:%S').replace(tzinfo=UTC()),
             'slug': i['slug'],
             'wordpress_id': int(i['wp_id']),
             'comments': i['comments'],
