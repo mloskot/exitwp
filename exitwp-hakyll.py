@@ -13,7 +13,7 @@ from glob import glob
 import re
 import sys
 import yaml
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from urlparse import urlparse, urljoin
 from urllib import urlretrieve
 from html2text import html2text_file
@@ -201,11 +201,14 @@ def write_hakyll(data, target_format):
         filename_parts = [full_dir, '/']
         if build_mode == 'tree':
             m = re.search('(\d+-\d+-\d+)(-)(.+)', item['uid'])
-            uiddt = datetime.strptime(m.group(1),'%Y-%m-%d').strftime('%Y/%m/%d')
-            filename_parts.append(uiddt)
-            if (not os.path.exists(''.join(filename_parts))):
-                    os.makedirs(''.join(filename_parts))
-            filename_parts.append(os.path.join('/', m.group(3)))
+            if m is not None:
+              uiddt = datetime.strptime(m.group(1),'%Y-%m-%d').strftime('%Y/%m/%d')
+              filename_parts.append(uiddt)
+              if (not os.path.exists(''.join(filename_parts))):
+                      os.makedirs(''.join(filename_parts))
+              filename_parts.append(os.path.join('/', m.group(3)))
+            else:
+              filename_parts.append(item['uid'])
         else:
             filename_parts.append(item['uid'])
         if item['type'] == 'page':
