@@ -1,6 +1,10 @@
 # exitwp-hakyll
 
-This is exitwp version taking into account requirements specific to Hakyll.
+Port of Thomas Frössman's [exitwp](https://github.com/thomasf/exitwp) tool.
+
+exitwp-hakyll is tool for making migration from one or more wordpress blogs to the [Hakyll](https://jaspervdj.be/hakyll/) static sites generator as easy as possible.
+
+The latest version at https://github.com/mloskot/exitwp-hakyll
 
 ## Requirements
 
